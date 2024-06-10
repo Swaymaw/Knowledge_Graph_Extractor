@@ -38,7 +38,7 @@ export default function TaskFiles(props) {
     useEffect(() => {
         handleRefresh();
         // Set up the interval to fetch data every 10 seconds
-        const intervalId = setInterval(handleRefresh, 10000);
+        const intervalId = setInterval(handleRefresh, 1000);
         // Cleanup interval on component unmount
         return () => clearInterval(intervalId);
     }, []);
@@ -78,6 +78,18 @@ export default function TaskFiles(props) {
         setSelectedItem(null);
     };
 
+    const handleVal = (prog) => {
+        let prog_val = 0
+        for (let i = 0; i < prog.length; i++) {
+            prog_val += Math.floor(100/prog.length)
+        }
+        if (prog_val == 99) {
+            return 100
+        } else {
+            return prog_val
+        }
+    }
+
     return (
         <div className="text-light">
             <table className="table table-dark my-5">
@@ -95,13 +107,27 @@ export default function TaskFiles(props) {
                 <tbody>
                     {files_data.reverse().map((item, index) => (
                         <tr key={index}>
-                            <td>{item._id} <button className='btn btn-dark' onClick={() => {handleDelete(item._id)}}><i className='fa-solid fa-trash text-end'></i></button></td>
+                            <td>{item._id} 
+                                <button className='btn btn-dark' onClick={() => {handleDelete(item._id)}}>
+                                    <i className='fa-solid fa-trash text-end'></i>
+                                </button>
+                            </td>
                             <td><p>{item.name}</p></td>
                             <td>{item.created_on.slice(0, 19)}</td>
                             <td>{item.job_id}</td>
-                            <td className='text-center'><button className='btn btn-dark' onClick={() => handleShowModal(item)}><i className='fa-solid fa-circle-info text-end'></i></button></td>
-                            <td className='text-center'><p>{item.status}</p>{item.status === 'Completed' && <button className='btn btn-outline-primary' onClick={() => handleShowGraph(item)}>GRAPH</button>}</td>
-                            <td className='text-center'>{item.status == 'Completed' && <p className='mt-3'>Process Finished</p>}{item.status != 'Completed' && <button className='btn btn-outline-primary' onClick={() => handleStart(item._id)}>START</button>}</td>
+                            <td className='text-center'>
+                                <button className='btn btn-dark' onClick={() => handleShowModal(item)}>
+                                    <i className='fa-solid fa-circle-info text-end'></i>
+                                </button>
+                            </td>
+                            <td className='text-center'>
+                                <p>{item.status}</p>
+                                {item.status === 'Completed' && <button className='btn btn-outline-primary' onClick={() => handleShowGraph(item)}>GRAPH</button>}
+                            </td>
+                            <td className='text-center'>
+                                {item.status == 'Completed' && <p className='mt-3'>Process Finished</p>}
+                                {item.status != 'Completed' && <button className='btn btn-outline-primary' onClick={() => handleStart(item._id)}>START</button>}
+                            </td>
                         </tr>
                     ))}
                 </tbody>

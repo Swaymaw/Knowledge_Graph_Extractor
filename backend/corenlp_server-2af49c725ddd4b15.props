@@ -4,5 +4,5 @@ outputFormat = serialized
 
 serializer = edu.stanford.nlp.pipeline.ProtobufAnnotationSerializer
 
-openie.affinity_probability_cap = 0.75
+openie.affinity_probability_cap = 0.8
 
