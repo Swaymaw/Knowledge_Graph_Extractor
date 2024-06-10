@@ -96,6 +96,5 @@ def chunked_triplet_extractor(text, chunk_size=200, step_size=100):
             for triple in client.annotate(work_text):
                 if triple not in fin_triplets[-10:]: 
                     fin_triplets.append(triple)
-        client.generate_graphviz_graph(text, "graph.png")
     
     return fin_triplets
