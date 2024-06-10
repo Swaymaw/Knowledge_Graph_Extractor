@@ -14,9 +14,9 @@ def genDatabase():
 class DatabaseControl: 
     def __init__(self) -> None:
         # setting up mongo connection
-        self.myclient = pymongo.MongoClient(Config["mongo_port"]) 
-        self.mydb = self.myclient[Config["mongo_db"]]
-        self.my_col = self.mydb[Config["mongo_col"]]
+        self.myclient = pymongo.MongoClient(Config.mongo_port) 
+        self.mydb = self.myclient[Config.mongo_db]
+        self.my_col = self.mydb[Config.mongo_col]
 
     def update_progress(self, i, file_id): 
         try: 

@@ -5,8 +5,8 @@ from config import Config
 
 celery = Celery(
     "task", 
-    backend = Config["redis_port"],
-    broker = Config["redis_port"]
+    backend = Config.redis_port,
+    broker = Config.redis_port
 )
 
 db = genDatabase()

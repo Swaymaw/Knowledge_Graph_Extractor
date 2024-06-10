@@ -7,7 +7,7 @@ from config import Config
 app = FastAPI()
 
 origins = [
-    Config["origin"]
+    Config.origin
 ]
 
 app.add_middleware(
@@ -35,26 +35,6 @@ async def complete_pipeline(file_id):
     job_id = str(job_id)
     db.jobid_update(file_id, job_id)
     return {"job_id": job_id}
-
-# def extract_text(file_id):
-#     response = db.extract_text_from_file(file_id)
-#     print(response)
-#     return {"details": response}
-
-# @app.put("/cleantext")
-# def cleanup_text(file_id):
-#     response = db.text_cleanup_of_file(file_id)
-#     return response
-
-# @app.put("/tripletsgen")
-# def gen_triplets(file_id):
-#     response = db.triple_saver(file_id)
-#     return response
-
-# @app.get("/filecontent")
-# def get_file_text(file_id):
-#     response = db.find_file(file_id)
-#     return response
 
 @app.get("/gettriplets")
 async def get_triplet_dict(file_id):
