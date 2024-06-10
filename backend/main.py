@@ -22,7 +22,7 @@ db = genDatabase()
 pre_process_steps = PreprocessSteps()
 
 @app.get("/")
-def get_root():
+async def get_root():
     return {"File": "Upload"}
 
 @app.post("/uploadfile")
@@ -31,7 +31,7 @@ async def create_file(file: UploadFile = File(...)):
     return response
 
 @app.put("/fullpipeline")
-def complete_pipeline(file_id):
+async def complete_pipeline(file_id):
     job_id = pipeline.delay(file_id) 
     job_id = str(job_id)
     db.jobid_update(file_id, job_id)
@@ -58,26 +58,26 @@ def complete_pipeline(file_id):
 #     return response
 
 @app.get("/gettriplets")
-def get_triplet_dict(file_id):
+async def get_triplet_dict(file_id):
     response = db.find_triplets(file_id)
     return response
 
 @app.get("/getprogress")
-def document_progress(file_id):
+async def document_progress(file_id):
     response = db.find_progress(file_id)
     return response
 
 @app.get("/getall")
-def get_all_data():
+async def get_all_data():
     response = db.fetch_all_data()
     return response
 
 @app.delete("/delete_file")
-def delete_file_by_name(file_id): 
+async def delete_file_by_name(file_id): 
     response = db.delete_file(file_id)
     return response
 
 @app.delete("/reset_db")
-def clear_database():
+async def clear_database():
     response = db.clear_db()
     return response
