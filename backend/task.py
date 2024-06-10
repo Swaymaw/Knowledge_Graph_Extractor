@@ -1,11 +1,12 @@
 from celery import Celery
 from database import genDatabase
 from preprocess import PreprocessSteps
+from config import Config
 
 celery = Celery(
     "task", 
-    backend = "redis://localhost:6379",
-    broker = "redis://localhost:6379" 
+    backend = Config["redis_port"],
+    broker = Config["redis_port"]
 )
 
 db = genDatabase()

@@ -1,13 +1,13 @@
 from fastapi import FastAPI, UploadFile, File
 from database import genDatabase
-from preprocess import PreprocessSteps
 from task import pipeline
 from fastapi.middleware.cors import CORSMiddleware
+from config import Config
 
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000"
+    Config["origin"]
 ]
 
 app.add_middleware(
@@ -19,7 +19,6 @@ app.add_middleware(
 )
 
 db = genDatabase()
-pre_process_steps = PreprocessSteps()
 
 @app.get("/")
 async def get_root():
