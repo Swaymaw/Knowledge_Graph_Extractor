@@ -24,7 +24,7 @@ def extract_text_from_pdf(file):
     return pdf_text
 
 nltk.download('stopwords')
-nlp = spacy.load("en_core_web_lg", disable=["parser", "ner"]) 
+nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"]) 
 spacy_words = set(nlp.vocab.strings)
 stop_words = set(stopwords.words("english"))
 
