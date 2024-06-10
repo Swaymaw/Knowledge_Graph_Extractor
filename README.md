@@ -31,3 +31,8 @@ To view the knowledge graph the user clicks on the Graph button which appears wh
 
     # The Frontend Application Visible at - http://localhost:3000
 ```
+Next Steps: 
+
+1) Refactor Code to have seperate class for preprocessing and a seperate class for the stanford OpenIE as well. 
+2) Dockerize the app using docker and docker-compose
+3)

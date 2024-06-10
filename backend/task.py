@@ -1,8 +1,6 @@
 from celery import Celery
-from fastapi import File, UploadFile
-from database import DatabaseControl
-
-db = DatabaseControl()
+from database import genDatabase
+from preprocess import PreprocessSteps
 
 celery = Celery(
     "task", 
@@ -10,9 +8,12 @@ celery = Celery(
     broker = "redis://localhost:6379" 
 )
 
+db = genDatabase()
+
 @celery.task() 
 def pipeline(id): 
-    db.extract_text_from_file(id)
-    db.text_cleanup_of_file(id)
-    db.triple_saver(id)
+    preprocess = PreprocessSteps()
+    preprocess.extract_text_from_file(id)
+    preprocess.text_cleanup_of_file(id)
+    preprocess.triple_saver(id)
     return {"Success":f"Complete for {id}"}

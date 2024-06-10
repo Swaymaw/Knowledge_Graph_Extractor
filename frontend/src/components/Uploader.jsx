@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import api from '../api'
 
 export default function Uploader(props) {
-    const {file, setFile, files_data, setData} = props
+    const {file, setFile, setData} = props
 
     const handleFileInputChange = (event) => {
         setFile(event.target.files[0])
@@ -23,7 +23,7 @@ export default function Uploader(props) {
             }
             api.get("/getall")
             .then( response => {
-                setData(response.data.data); 
+                setData(response.data.data.reverse()); 
             })
             .catch(error => {
                 console.error(error)

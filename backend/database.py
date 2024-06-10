@@ -1,13 +1,15 @@
 import pymongo 
 from fastapi import HTTPException, File, UploadFile
-from utils import extract_text_from_pdf, text_cleanup, chunked_triplet_extractor
 from schema import MongoDataBase
 from bson.objectid import ObjectId
 import uuid
 from fastapi.encoders import jsonable_encoder
 from datetime import datetime
+from functools import lru_cache
 
-
+@lru_cache(maxsize=1)
+def genDatabase(): 
+    return DatabaseControl()
 class DatabaseControl: 
     def __init__(self) -> None:
         # setting up mongo connection
@@ -32,6 +34,7 @@ class DatabaseControl:
     def save_file_content(self, file: UploadFile = File(...)):
         if not file.filename.endswith(".pdf"):
             raise HTTPException(500, "Bad Request / Only PDF Files accepted")
+        # use of uuid is not necessary here
         data = MongoDataBase(_id=uuid.uuid4(), name=file.filename, created_on=str(datetime.now()), byte=str(file.file.read()))
         try: 
             x = self.my_col.insert_one(jsonable_encoder(data))
@@ -40,41 +43,6 @@ class DatabaseControl:
         except: 
             return {"Document Saving": "Failed"}
         
-    def extract_text_from_file(self, file_id):
-        doc = self.my_col.find_one({"_id": ObjectId(file_id)})
-        try:
-            text = extract_text_from_pdf(doc["byte"])
-            self.my_col.update_one({"_id": ObjectId(file_id)}, {"$set": {"content": text}})
-            self.update_progress(0, file_id)
-            self.status_update("In Progress", file_id)
-            return {"Updated Extracted Text"}
-        except: 
-            self.status_update("Failed", file_id)
-            raise HTTPException(300, "File Couldn't be extracted")
-        
-    def text_cleanup_of_file(self, file_id):
-        doc =  self.my_col.find_one({"_id": ObjectId(file_id)})
-        try: 
-            text = text_cleanup(doc["content"])
-            self.my_col.update_one({"_id": ObjectId(file_id)}, {"$set": {"content": text}})
-            self.update_progress(1, file_id)
-            return {"Updated Cleaned Text"}
-        except:
-            self.status_update("Failed", file_id)
-            raise HTTPException(300, "File Couldn't be Cleaned")
-
-    def triple_saver(self, file_id):
-        doc =  self.my_col.find_one({"_id": ObjectId(file_id)})
-        try: 
-            triplets = chunked_triplet_extractor(doc["content"])
-            self.my_col.update_one({"_id": ObjectId(file_id)}, {"$set": {"triplets": triplets}})
-            self.update_progress(2, file_id)
-            self.status_update("Completed", file_id)
-            return {"Successfully generate": f"Triplets for {file_id}"}
-        except:
-            self.status_update("Failed", file_id)
-            raise HTTPException(300, "Triplets Couldn't Be generated")
-
     def find_file(self, file_id): 
         document = self.my_col.find_one({"_id": ObjectId(file_id)})
         document["_id"] = str(document["_id"])      

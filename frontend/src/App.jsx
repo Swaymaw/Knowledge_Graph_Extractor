@@ -12,9 +12,9 @@ export default function App(){
   return (
     <div className="bg-dark">
       <Header/>
-      <Uploader file={file} setFile={setFile} files_data={files_data} setData={setData}/>
+      <Uploader file={file} setFile={setFile} setData={setData}/>
       <Ribbon files_data={files_data} setData={setData}/>
-      <TaskFiles file={file} setFile={setFile} files_data={files_data} setData={setData}/>
+      <TaskFiles files_data={files_data} setData={setData}/>
       <Footer/>
     </div>
   )

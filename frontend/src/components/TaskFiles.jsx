@@ -12,7 +12,7 @@ export default function TaskFiles(props) {
     const handleRefresh = () => {
         api.get("/getall")
         .then( response => {
-            setData(response.data.data); 
+            setData(response.data.data.reverse()); 
         })
         .catch(error => {
             console.error(error)
@@ -78,21 +78,9 @@ export default function TaskFiles(props) {
         setSelectedItem(null);
     };
 
-    const handleVal = (prog) => {
-        let prog_val = 0
-        for (let i = 0; i < prog.length; i++) {
-            prog_val += Math.floor(100/prog.length)
-        }
-        if (prog_val == 99) {
-            return 100
-        } else {
-            return prog_val
-        }
-    }
-
     return (
         <div className="text-light">
-            <table className="table table-dark my-5">
+            <table className="table table-dark my-5 table-container">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -105,7 +93,7 @@ export default function TaskFiles(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {files_data.reverse().map((item, index) => (
+                    {files_data.map((item, index) => (
                         <tr key={index}>
                             <td>{item._id} 
                                 <button className='btn btn-dark' onClick={() => {handleDelete(item._id)}}>
@@ -134,6 +122,7 @@ export default function TaskFiles(props) {
             </table>
             {selectedItem && <KnowledgeGraph show={showGraph} handleClose={handleCloseGraph} item={selectedItem} />}
             {selectedItem && <InfoModal show={showModal} handleClose={handleCloseModal} item={selectedItem} />}
+            <br/>
         </div>
     )
 }
