@@ -38,7 +38,7 @@ export default function TaskFiles(props) {
     useEffect(() => {
         handleRefresh();
         // Set up the interval to fetch data every 10 seconds
-        const intervalId = setInterval(handleRefresh, 1000);
+        const intervalId = setInterval(handleRefresh, 10000);
         // Cleanup interval on component unmount
         return () => clearInterval(intervalId);
     }, []);
