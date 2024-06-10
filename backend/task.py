@@ -1,7 +1,11 @@
-from celery import Celery
+from celery import Celery, signals
 from database import genDatabase
 from preprocess import PreprocessSteps
 from config import Config
+
+@signals.setup_logging.connect
+def setup_celery_logging(**kwargs):
+    pass
 
 celery = Celery(
     "task", 
