@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import api from '../api'
 
 export default function Uploader(props) {

@@ -10,6 +10,7 @@ RUN apt-get install -y
 RUN pip install --upgrade pip
 RUN pip install --timeout=1000 --no-cache-dir -r /requirements.txt
 RUN python -m spacy download en
+RUN python -m nltk.downloader stopwords
 
 RUN apt-get update && \
     apt-get install -y default-jre && \

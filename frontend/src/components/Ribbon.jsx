@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import api from '../api'
 
 export default function Ribbon(props) {
@@ -23,7 +23,7 @@ export default function Ribbon(props) {
     const handleRefresh = () => {
             api.get("/getall")
             .then( response => {
-                setData(response.data.data); 
+                setData(response.data.data.reverse()); 
             })
             .catch(error => {
                 console.error(error)

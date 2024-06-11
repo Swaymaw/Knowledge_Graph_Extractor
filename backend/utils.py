@@ -53,7 +53,7 @@ class TextProcessing:
         filtered_words = [w for w in tokens if len(w) > 2]
 
         # 3) Stop Words Removal ✅ Gives Worse Results
-        # inp_str_splitted = [w for w in inp_str_splitted if w not in stop_words]
+        filtered_words = [w for w in filtered_words if w not in self.stop_words]
 
         cleaned_str = " ".join(filtered_words)
 
@@ -100,7 +100,7 @@ class TripletGeneration:
                 work_text = text_splitted[i:i+chunk_size]
                 work_text = " ".join(work_text)
                 for triplet in client.annotate(work_text):
-                    if triplet not in fin_triplets: 
+                    if triplet not in fin_triplets[max(-100, -len(fin_triplets)):]: 
                         fin_triplets.append(triplet)
         
         return fin_triplets
