@@ -11,28 +11,10 @@ To view the knowledge graph the user clicks on the Graph button which appears wh
 
 
 #### Steps to run the backend and frontend
+Run this from the root of the directory while making sure you don't have older images for mongo and redis.
+This will run the application at http://localhost:3000
 
 ```zsh
-    docker run -dp 27017:27017 --name=<container-name> mongo:latest
-    docker run -dp 6379:6379 --name=<container-name> -d redis:latest
     
-    # or
-
-    docker start e81d0233f061 602aecb8cc5d
-    
-
-    cd backend
-    uvicorn main:app --reload
-    celery -A task worker --loglevel=debug --concurrency=1 --pool=solo
-
-    cd ..
-    cd frontend 
-    npm run dev
-
-    # The Frontend Application Visible at - http://localhost:3000
+    docker compose up 
 ```
-Next Steps: 
-
-1) Refactor Code to have seperate class for preprocessing and a seperate class for the stanford OpenIE as well. 
-2) Dockerize the app using docker and docker-compose
-3)
