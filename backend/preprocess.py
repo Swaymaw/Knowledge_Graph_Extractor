@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from utils import TextProcessing, TripletGeneration
+from utils import TextProcessing, genTripletGeneration
 from bson.objectid import ObjectId
 from database import genDatabase
 
@@ -35,7 +35,7 @@ class PreprocessSteps:
 
     def triple_saver(self, file_id):
         doc =  self.my_col.find_one({"_id": ObjectId(file_id)})
-        triplet_gen = TripletGeneration()
+        triplet_gen = genTripletGeneration()
         try: 
             triplets = triplet_gen.chunked_triplet_extractor(doc["content"])
             self.my_col.update_one({"_id": ObjectId(file_id)}, {"$set": {"triplets": triplets}})

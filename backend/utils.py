@@ -2,12 +2,12 @@ import pypdf
 import spacy 
 from nltk.corpus import stopwords
 import nltk 
-from openie import StanfordOpenIE
 import ast
 import re
 from nltk.tokenize import RegexpTokenizer
 import uuid
 import os
+from functools import lru_cache
 
 class TextProcessing: 
     def __init__(self): 
@@ -83,22 +83,40 @@ class TextProcessing:
         cleaned_str = " ".join(out_words)
 
         return cleaned_str
-    
+
+@lru_cache(maxsize=1)
+def genTripletGeneration(): 
+    return TripletGeneration()
+
 class TripletGeneration:
     def __init__(self):
-        self.properties = {
-            "openie.affinity_probability_cap": 3/4, 
-            }
+        self.nlp = spacy.load("en_core_web_sm") 
 
+    def find_svo(self, doc):
+        svos = []
+        for token in doc:
+            if token.dep_ in ('nsubj', 'nsubjpass'):
+                subject = token.text
+                verb = ""
+                object = ""
+                for child in token.head.children:
+                    if child.dep_ in ('dobj', 'pobj'):
+                        verb = token.head.text
+                        object = child.text
+                        svos.append({'subject': subject, 'relation': verb, 'object': object})
+        return svos
+
+    def extract_svo(self, text):
+        doc = self.nlp(text)
+        return self.find_svo(doc)
+        
     def chunked_triplet_extractor(self, text, chunk_size=200, step_size=100): 
         fin_triplets = []
         text_splitted = text.split()
-        with StanfordOpenIE(properties=self.properties) as client: 
-            for i in range(0, len(text_splitted) - chunk_size, step_size):
-                work_text = text_splitted[i:i+chunk_size]
-                work_text = " ".join(work_text)
-                for triplet in client.annotate(work_text):
-                    if triplet not in fin_triplets[max(-100, -len(fin_triplets)):]: 
-                        fin_triplets.append(triplet)
-        
+        for i in range(0, len(text_splitted) - chunk_size, step_size):
+            work_text = text_splitted[i:i+chunk_size]
+            work_text = " ".join(work_text)
+            for triplet in self.extract_svo(work_text):
+                if triplet not in fin_triplets[-10:]: 
+                    fin_triplets.append(triplet)
         return fin_triplets
