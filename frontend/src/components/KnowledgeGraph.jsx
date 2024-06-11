@@ -45,10 +45,38 @@ export default function KnowledgeGraph({ show, handleClose, item }) {
             color: '#FFFFFF',
             arrows: {
                 to: { enabled: true, scaleFactor: 1.2 }
+            },
+            smooth: {
+                type: 'continuous',
+                forceDirection: 'none',
+                roundness: 0.5
             }
         },
         physics: {
-            enabled: true
+            enabled: true,
+            solver: 'forceAtlas2Based',
+            forceAtlas2Based: {
+                gravitationalConstant: -100,
+                centralGravity: 0.01,
+                springLength: 200,
+                springConstant: 0.08,
+                damping: 0.4,
+                avoidOverlap: 1
+            },
+            maxVelocity: 50,
+            minVelocity: 0.1,
+            stabilization: {
+                enabled: true,
+                iterations: 100,
+                updateInterval: 25
+            },
+            timestep: 0.5,
+            adaptiveTimestep: true
+        },
+        interaction: {
+            dragNodes: true,
+            hideEdgesOnDrag: true,
+            hideNodesOnDrag: false
         }
     }), []);
 
