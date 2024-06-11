@@ -67,7 +67,7 @@ export default function KnowledgeGraph({ show, handleClose, item }) {
             minVelocity: 0.1,
             stabilization: {
                 enabled: true,
-                iterations: 100,
+                iterations: 200,
                 updateInterval: 25
             },
             timestep: 0.5,
