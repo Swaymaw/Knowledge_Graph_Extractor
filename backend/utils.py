@@ -1,4 +1,4 @@
-import PyPDF2
+import pypdf
 import spacy 
 from nltk.corpus import stopwords
 import nltk 
@@ -23,9 +23,7 @@ class TextProcessing:
         with open(file_path, "wb") as f: 
             f.write(file)
         
-        f = open(file_path, "rb")
-
-        reader = PyPDF2.PdfReader(f, strict=False)
+        reader = pypdf.PdfReader(file_path)
         for page in reader.pages: 
             content = page.extract_text()
             pdf_text += content + "\n"

@@ -4,6 +4,9 @@ WORKDIR /
 
 COPY . ./
 
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
 RUN apt-get update && apt-get install -y
 RUN apt-get install gcc -y
 RUN apt-get install -y
@@ -25,5 +28,4 @@ RUN apt-get update && \
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 RUN export JAVA_HOME
 
-CMD celery -A task worker --concurrency=1 --pool=solo
-
+CMD celery -A task worker --loglevel=debug --concurrency=1 --pool=solo
